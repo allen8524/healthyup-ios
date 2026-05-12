@@ -1,0 +1,137 @@
+//
+//  ViewController.swift
+//  BMIhms
+//
+//  Created by 1 on 2025/11/11.
+//
+
+import UIKit
+
+class ViewController: UIViewController {
+    
+    @IBOutlet weak var txtHeight: UITextField!
+    @IBOutlet weak var txtWeight: UITextField!
+    @IBOutlet weak var lblResult: UILabel!
+    
+    @IBOutlet weak var genderSegment: UISegmentedControl!   // 남 / 여
+    @IBOutlet weak var imgBmi: UIImageView!                 // 가운데 BMI 이미지
+    
+    // BMI 코멘트를 보여줄 여러 줄 라벨
+    @IBOutlet weak var commentLabel: UILabel!
+    
+    @IBAction func calcBmi(_ sender: UIButton) {
+        // 입력값 확인
+        guard let heightText = txtHeight.text, !heightText.isEmpty,
+              let weightText = txtWeight.text, !weightText.isEmpty else {
+            lblResult.textColor = .systemRed
+            lblResult.backgroundColor = .clear
+            lblResult.numberOfLines = 1
+            lblResult.text = "⚠️ 키와 체중을 입력하세요."
+            
+            commentLabel.text = "키와 체중을 먼저 입력해 주세요."
+            return
+        }
+
+        // Double 변환
+        guard let height = Double(heightText),
+              let weight = Double(weightText),
+              height > 0 else {
+            lblResult.textColor = .systemRed
+            lblResult.backgroundColor = .clear
+            lblResult.numberOfLines = 1
+            lblResult.text = "⚠️ 숫자로 올바르게 입력해주세요."
+            
+            commentLabel.text = "숫자로만 입력했는지 확인해 주세요."
+            return
+        }
+
+        // BMI 계산 (cm → m 변환)
+        let bmi = weight / (height * height * 0.0001)
+        let shortenedBmi = String(format: "%.1f", bmi)
+
+        // 성별에 따라 기준값 다르게 설정
+        let isMale = (genderSegment.selectedSegmentIndex == 0)
+        let gender = isMale ? "남성" : "여성"
+
+        // 남성: 20.0 ~ 25.0, 여성: 18.0 ~ 23.0
+        let normalMin = isMale ? 20.0 : 18.0
+        let normalMax = isMale ? 25.0 : 23.0
+
+        // 판정 계산
+        let body: String
+        var color = UIColor.white
+        var borderColor = UIColor.clear.cgColor
+        var comment = ""      // 코멘트 문구
+
+        if bmi < normalMin {
+            body = "저체중"
+            color = .systemTeal
+            borderColor = UIColor.systemBlue.cgColor
+            comment = "체중이 조금 적은 편입니다.\n식사를 규칙적으로 하고 근력 운동을 늘려 보세요."
+        } else if bmi <= normalMax {
+            body = "정상"
+            color = .systemGreen
+            borderColor = UIColor.systemGreen.cgColor
+            comment = "정상 범위입니다.\n지금과 같은 식습관과 운동 습관을 유지하면 좋겠습니다."
+        } else if bmi <= normalMax + 3.0 {
+            body = "과체중"
+            color = .systemOrange
+            borderColor = UIColor.systemOrange.cgColor
+            comment = "약간 과체중입니다.\n가벼운 유산소 운동과 간단한 식단 조절을 시도해 보세요."
+        } else {
+            body = "비만"
+            color = .systemRed
+            borderColor = UIColor.systemRed.cgColor
+            comment = "비만 범위에 해당합니다.\n식습관 조절과 정기적인 운동, 전문가 상담을 권장드립니다."
+        }
+
+        let normalMinText = String(format: "%.1f", normalMin)
+        let normalMaxText = String(format: "%.1f", normalMax)
+
+        // 결과 라벨 꾸미기 (한 줄 요약)
+        lblResult.numberOfLines = 2
+        lblResult.backgroundColor = color
+        lblResult.textColor = .white
+        lblResult.clipsToBounds = true
+        lblResult.layer.cornerRadius = 10
+
+        lblResult.text = "\(gender) / BMI: \(shortenedBmi) (\(body)) / 정상: \(normalMinText)~\(normalMaxText)"
+
+        // 코멘트 라벨에 여러 줄 문구 넣기
+        commentLabel.text = comment
+
+        // 이미지 테두리 색
+        imgBmi.layer.borderWidth = 4
+        imgBmi.layer.borderColor = borderColor
+
+        print("BMI: \(shortenedBmi), 판정: \(body), 성별: \(gender)")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // 처음 진입했을 때 기본 상태
+        lblResult.text = "성별을 선택하고 BMI 계산 버튼을 눌러보세요."
+        lblResult.numberOfLines = 2
+        lblResult.textColor = .white
+        lblResult.backgroundColor = .systemGreen
+        lblResult.clipsToBounds = true
+        lblResult.layer.cornerRadius = 10
+        
+        txtHeight.placeholder = "예: 160"
+        txtWeight.placeholder = "예: 60"
+        
+        genderSegment.selectedSegmentIndex = 0
+        
+        // 코멘트 라벨 설정 (여러 줄)
+        commentLabel.text = ""
+        commentLabel.numberOfLines = 0          // 줄 제한 없음
+        commentLabel.lineBreakMode = .byWordWrapping
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        imgBmi.layer.cornerRadius = imgBmi.bounds.width / 2
+        imgBmi.clipsToBounds = true
+    }
+}
