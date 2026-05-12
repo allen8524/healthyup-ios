@@ -20,6 +20,7 @@ class VideoViewController: UIViewController {
     // MARK: - Playback
     
     private func playVideo(named name: String, title: String) {
+        // Bundle 내부 mp4 파일을 AVPlayerViewController로 재생합니다.
         guard let url = Bundle.main.url(forResource: name, withExtension: "mp4") else {
             showAlert(message: "\(title) 영상 파일을 찾을 수 없습니다.\n파일 이름과 Target Membership 설정을 확인하세요.")
             return

@@ -41,7 +41,7 @@ class ViewController: UIViewController {
         let isMale = (genderSegment.selectedSegmentIndex == 0)
         let gender = isMale ? "남성" : "여성"
 
-        // 성별에 따라 정상 BMI 범위를 다르게 적용합니다.
+        // BMI 판정 기준은 학습용 예시이며 의료적 판단을 대체하지 않습니다.
         let normalMin = isMale ? 20.0 : 18.0
         let normalMax = isMale ? 25.0 : 23.0
 
@@ -54,22 +54,22 @@ class ViewController: UIViewController {
             body = "저체중"
             color = .systemTeal
             borderColor = UIColor.systemBlue.cgColor
-            comment = "체중이 조금 적은 편입니다.\n식사를 규칙적으로 하고 근력 운동을 늘려 보세요."
+            comment = "예시 기준상 저체중 범위에 해당합니다.\n식사를 규칙적으로 하고 근력 운동을 늘려 보세요."
         } else if bmi <= normalMax {
             body = "정상"
             color = .systemGreen
             borderColor = UIColor.systemGreen.cgColor
-            comment = "정상 범위입니다.\n지금과 같은 식습관과 운동 습관을 유지하면 좋겠습니다."
+            comment = "예시 기준상 정상 범위입니다.\n지금과 같은 식습관과 운동 습관을 유지하면 좋겠습니다."
         } else if bmi <= normalMax + 3.0 {
             body = "과체중"
             color = .systemOrange
             borderColor = UIColor.systemOrange.cgColor
-            comment = "약간 과체중입니다.\n가벼운 유산소 운동과 간단한 식단 조절을 시도해 보세요."
+            comment = "예시 기준상 과체중 범위에 가깝습니다.\n가벼운 유산소 운동과 간단한 식단 조절을 시도해 보세요."
         } else {
             body = "비만"
             color = .systemRed
             borderColor = UIColor.systemRed.cgColor
-            comment = "비만 범위에 해당합니다.\n식습관 조절과 정기적인 운동, 전문가 상담을 권장합니다."
+            comment = "예시 기준상 비만 범위에 해당합니다.\n식습관 조절과 정기적인 운동, 전문가 상담을 권장합니다."
         }
 
         let normalMinText = String(format: "%.1f", normalMin)

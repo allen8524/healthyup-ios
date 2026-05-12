@@ -9,13 +9,13 @@ class WebViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // 기본 운동 정보 페이지를 표시합니다.
+        // 기본 운동 정보 검색 결과를 표시합니다.
         openWorkoutInfo()
     }
 
     // MARK: - Actions
 
-    /// 운동 정보 검색 페이지를 엽니다.
+    /// 운동 정보 검색 결과 페이지를 엽니다.
     @IBAction func goWorkoutInfo(_ sender: UIButton) {
         openWorkoutInfo()
     }
@@ -38,7 +38,7 @@ class WebViewController: UIViewController {
         webView.load(request)
     }
 
-    /// 네이버에서 운동 정보 검색 결과를 엽니다.
+    /// URLComponents로 검색어를 안전하게 조합해 네이버 검색 결과를 엽니다.
     private func openWorkoutInfo() {
         var components = URLComponents(string: "https://m.search.naver.com/search.naver")
         components?.queryItems = [
@@ -52,7 +52,7 @@ class WebViewController: UIViewController {
         load(url)
     }
 
-    /// 유튜브에서 특정 검색어로 검색합니다.
+    /// URLComponents로 검색어를 안전하게 조합해 유튜브 검색 결과를 엽니다.
     private func openYoutubeSearch(query: String) {
         var components = URLComponents(string: "https://m.youtube.com/results")
         components?.queryItems = [

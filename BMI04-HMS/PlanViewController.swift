@@ -12,6 +12,8 @@ class PlanViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        levelSegment.setTitle("가볍게", forSegmentAt: 0)
+        levelSegment.setTitle("보통", forSegmentAt: 1)
         levelSegment.setTitle("강하게", forSegmentAt: 2)
 
         // 긴 문구가 잘리지 않도록 라벨 표시를 조정합니다.
