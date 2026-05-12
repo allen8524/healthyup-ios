@@ -45,7 +45,7 @@ iOS 프로그래밍 기초 학습 과정에서 제작했으며, BMI 계산 결�
 
 BMI 판정 기준은 학습용 예시 기준이며 의료적 판단을 대체하지 않습니다. 실제 건강 상태 판단은 전문가 상담이나 공신력 있는 기준을 참고해야 합니다.
 
-영상 자료는 학습 및 과제 시연 목적으로 사용했습니다. 공개 포트폴리오에서는 저작권 문제가 없도록 직접 제작한 자료 또는 출처가 명확한 자료를 사용하는 것을 목표로 합니다.
+영상 자료는 학습 및 과제 시연용 리소스입니다. 공개 포트폴리오에서는 직접 제작 영상 또는 출처와 사용 권한이 명확한 자료를 사용하는 방향으로 정리할 예정이며, 출처가 불명확한 영상은 실제 서비스 배포용 리소스로 사용하지 않습니다.
 
 ## 실행 방법
 
@@ -86,8 +86,9 @@ HealthyUp-iOS/
 | --- | --- |
 | `ViewController.swift` | BMI 계산, 성별 기준 분기, 결과별 UI 피드백을 담당합니다. |
 | `WebViewController.swift` | `WKWebView`로 운동 관련 외부 검색 결과를 앱 내부에서 표시합니다. |
-| `VideoViewController.swift` | 번들에 포함된 로컬 mp4 운동 영상을 `AVPlayerViewController`로 재생합니다. |
+| `VideoViewController.swift` | `bench.mp4`, `squat.mp4`, `deadlift.mp4`를 `AVPlayerViewController`로 재생합니다. |
 | `PlanViewController.swift` | 운동 강도, 시간, 세트 수 입력값에 따라 운동 계획 요약 문구를 갱신합니다. |
+| `bmi.mp4` | Xcode 프로젝트 Resources에 포함된 보조/시연 리소스입니다. 현재 영상 재생 화면 버튼에는 연결되어 있지 않습니다. |
 | `Assets.xcassets` | 앱 아이콘과 화면에서 사용하는 이미지 리소스를 관리합니다. |
 | `docs/screenshots` | README에 표시할 앱 화면 이미지를 보관합니다. |
 

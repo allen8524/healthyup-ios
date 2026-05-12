@@ -34,61 +34,33 @@ class ViewController: UIViewController {
             return
         }
 
-        // cm 단위 키를 사용해 BMI를 계산합니다.
-        let bmi = weight / (height * height * 0.0001)
+        let bmi = calculateBmi(height: height, weight: weight)
         let shortenedBmi = String(format: "%.1f", bmi)
 
         let isMale = (genderSegment.selectedSegmentIndex == 0)
         let gender = isMale ? "남성" : "여성"
 
         // BMI 판정 기준은 학습용 예시이며 의료적 판단을 대체하지 않습니다.
-        let normalMin = isMale ? 20.0 : 18.0
-        let normalMax = isMale ? 25.0 : 23.0
+        let range = normalRange(forMale: isMale)
+        let feedback = bmiFeedback(for: bmi, normalRange: range)
 
-        let body: String
-        var color = UIColor.white
-        var borderColor = UIColor.clear.cgColor
-        var comment = ""
-
-        if bmi < normalMin {
-            body = "저체중"
-            color = .systemTeal
-            borderColor = UIColor.systemBlue.cgColor
-            comment = "예시 기준상 저체중 범위에 해당합니다.\n식사를 규칙적으로 하고 근력 운동을 늘려 보세요."
-        } else if bmi <= normalMax {
-            body = "정상"
-            color = .systemGreen
-            borderColor = UIColor.systemGreen.cgColor
-            comment = "예시 기준상 정상 범위입니다.\n지금과 같은 식습관과 운동 습관을 유지하면 좋겠습니다."
-        } else if bmi <= normalMax + 3.0 {
-            body = "과체중"
-            color = .systemOrange
-            borderColor = UIColor.systemOrange.cgColor
-            comment = "예시 기준상 과체중 범위에 가깝습니다.\n가벼운 유산소 운동과 간단한 식단 조절을 시도해 보세요."
-        } else {
-            body = "비만"
-            color = .systemRed
-            borderColor = UIColor.systemRed.cgColor
-            comment = "예시 기준상 비만 범위에 해당합니다.\n식습관 조절과 정기적인 운동, 전문가 상담을 권장합니다."
-        }
-
-        let normalMinText = String(format: "%.1f", normalMin)
-        let normalMaxText = String(format: "%.1f", normalMax)
+        let normalMinText = String(format: "%.1f", range.min)
+        let normalMaxText = String(format: "%.1f", range.max)
 
         lblResult.numberOfLines = 2
-        lblResult.backgroundColor = color
+        lblResult.backgroundColor = feedback.color
         lblResult.textColor = .white
         lblResult.clipsToBounds = true
         lblResult.layer.cornerRadius = 10
 
-        lblResult.text = "\(gender) / BMI: \(shortenedBmi) (\(body)) / 정상: \(normalMinText)~\(normalMaxText)"
+        lblResult.text = "\(gender) / BMI: \(shortenedBmi) (\(feedback.body)) / 정상: \(normalMinText)~\(normalMaxText)"
 
-        commentLabel.text = comment
+        commentLabel.text = feedback.comment
 
         imgBmi.layer.borderWidth = 4
-        imgBmi.layer.borderColor = borderColor
+        imgBmi.layer.borderColor = feedback.borderColor
 
-        print("BMI: \(shortenedBmi), 판정: \(body), 성별: \(gender)")
+        print("BMI: \(shortenedBmi), 판정: \(feedback.body), 성별: \(gender)")
     }
 
     override func viewDidLoad() {
@@ -115,5 +87,48 @@ class ViewController: UIViewController {
         super.viewDidLayoutSubviews()
         imgBmi.layer.cornerRadius = imgBmi.bounds.width / 2
         imgBmi.clipsToBounds = true
+    }
+
+    private func calculateBmi(height: Double, weight: Double) -> Double {
+        weight / (height * height * 0.0001)
+    }
+
+    private func normalRange(forMale isMale: Bool) -> (min: Double, max: Double) {
+        isMale ? (20.0, 25.0) : (18.0, 23.0)
+    }
+
+    private func bmiFeedback(
+        for bmi: Double,
+        normalRange: (min: Double, max: Double)
+    ) -> (body: String, color: UIColor, borderColor: CGColor, comment: String) {
+        if bmi < normalRange.min {
+            return (
+                body: "저체중",
+                color: .systemTeal,
+                borderColor: UIColor.systemBlue.cgColor,
+                comment: "예시 기준상 저체중 범위에 해당합니다.\n식사를 규칙적으로 하고 근력 운동을 늘려 보세요."
+            )
+        } else if bmi <= normalRange.max {
+            return (
+                body: "정상",
+                color: .systemGreen,
+                borderColor: UIColor.systemGreen.cgColor,
+                comment: "예시 기준상 정상 범위입니다.\n지금과 같은 식습관과 운동 습관을 유지하면 좋겠습니다."
+            )
+        } else if bmi <= normalRange.max + 3.0 {
+            return (
+                body: "과체중",
+                color: .systemOrange,
+                borderColor: UIColor.systemOrange.cgColor,
+                comment: "예시 기준상 과체중 범위에 가깝습니다.\n가벼운 유산소 운동과 간단한 식단 조절을 시도해 보세요."
+            )
+        } else {
+            return (
+                body: "비만",
+                color: .systemRed,
+                borderColor: UIColor.systemRed.cgColor,
+                comment: "예시 기준상 비만 범위에 해당합니다.\n식습관 조절과 정기적인 운동, 전문가 상담을 권장합니다."
+            )
+        }
     }
 }

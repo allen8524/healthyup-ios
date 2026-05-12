@@ -2,19 +2,24 @@ import UIKit
 import AVKit
 
 class VideoViewController: UIViewController {
+    private enum VideoResource {
+        static let bench = (name: "bench", title: "벤치프레스")
+        static let squat = (name: "squat", title: "스쿼트")
+        static let deadlift = (name: "deadlift", title: "데드리프트")
+    }
     
     // MARK: - IBActions
     
     @IBAction func tapBenchPress(_ sender: UIButton) {
-        playVideo(named: "bench", title: "벤치프레스")
+        playVideo(named: VideoResource.bench.name, title: VideoResource.bench.title)
     }
     
     @IBAction func tapSquat(_ sender: UIButton) {
-        playVideo(named: "squat", title: "스쿼트")
+        playVideo(named: VideoResource.squat.name, title: VideoResource.squat.title)
     }
     
     @IBAction func tapDeadlift(_ sender: UIButton) {
-        playVideo(named: "deadlift", title: "데드리프트")
+        playVideo(named: VideoResource.deadlift.name, title: VideoResource.deadlift.title)
     }
     
     // MARK: - Playback
