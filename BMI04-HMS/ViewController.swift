@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  BMIhms
-//
-//  Created by 1 on 2025/11/11.
-//
-
 import UIKit
 
 class ViewController: UIViewController {
@@ -13,55 +6,49 @@ class ViewController: UIViewController {
     @IBOutlet weak var txtWeight: UITextField!
     @IBOutlet weak var lblResult: UILabel!
     
-    @IBOutlet weak var genderSegment: UISegmentedControl!   // 남 / 여
-    @IBOutlet weak var imgBmi: UIImageView!                 // 가운데 BMI 이미지
-    
-    // BMI 코멘트를 보여줄 여러 줄 라벨
+    @IBOutlet weak var genderSegment: UISegmentedControl!
+    @IBOutlet weak var imgBmi: UIImageView!
     @IBOutlet weak var commentLabel: UILabel!
     
     @IBAction func calcBmi(_ sender: UIButton) {
-        // 입력값 확인
         guard let heightText = txtHeight.text, !heightText.isEmpty,
               let weightText = txtWeight.text, !weightText.isEmpty else {
             lblResult.textColor = .systemRed
             lblResult.backgroundColor = .clear
             lblResult.numberOfLines = 1
-            lblResult.text = "⚠️ 키와 체중을 입력하세요."
+            lblResult.text = "키와 체중을 입력하세요."
             
             commentLabel.text = "키와 체중을 먼저 입력해 주세요."
             return
         }
 
-        // Double 변환
         guard let height = Double(heightText),
               let weight = Double(weightText),
               height > 0 else {
             lblResult.textColor = .systemRed
             lblResult.backgroundColor = .clear
             lblResult.numberOfLines = 1
-            lblResult.text = "⚠️ 숫자로 올바르게 입력해주세요."
+            lblResult.text = "숫자로 올바르게 입력해 주세요."
             
             commentLabel.text = "숫자로만 입력했는지 확인해 주세요."
             return
         }
 
-        // BMI 계산 (cm → m 변환)
+        // cm 단위 키를 사용해 BMI를 계산합니다.
         let bmi = weight / (height * height * 0.0001)
         let shortenedBmi = String(format: "%.1f", bmi)
 
-        // 성별에 따라 기준값 다르게 설정
         let isMale = (genderSegment.selectedSegmentIndex == 0)
         let gender = isMale ? "남성" : "여성"
 
-        // 남성: 20.0 ~ 25.0, 여성: 18.0 ~ 23.0
+        // 성별에 따라 정상 BMI 범위를 다르게 적용합니다.
         let normalMin = isMale ? 20.0 : 18.0
         let normalMax = isMale ? 25.0 : 23.0
 
-        // 판정 계산
         let body: String
         var color = UIColor.white
         var borderColor = UIColor.clear.cgColor
-        var comment = ""      // 코멘트 문구
+        var comment = ""
 
         if bmi < normalMin {
             body = "저체중"
@@ -82,13 +69,12 @@ class ViewController: UIViewController {
             body = "비만"
             color = .systemRed
             borderColor = UIColor.systemRed.cgColor
-            comment = "비만 범위에 해당합니다.\n식습관 조절과 정기적인 운동, 전문가 상담을 권장드립니다."
+            comment = "비만 범위에 해당합니다.\n식습관 조절과 정기적인 운동, 전문가 상담을 권장합니다."
         }
 
         let normalMinText = String(format: "%.1f", normalMin)
         let normalMaxText = String(format: "%.1f", normalMax)
 
-        // 결과 라벨 꾸미기 (한 줄 요약)
         lblResult.numberOfLines = 2
         lblResult.backgroundColor = color
         lblResult.textColor = .white
@@ -97,10 +83,8 @@ class ViewController: UIViewController {
 
         lblResult.text = "\(gender) / BMI: \(shortenedBmi) (\(body)) / 정상: \(normalMinText)~\(normalMaxText)"
 
-        // 코멘트 라벨에 여러 줄 문구 넣기
         commentLabel.text = comment
 
-        // 이미지 테두리 색
         imgBmi.layer.borderWidth = 4
         imgBmi.layer.borderColor = borderColor
 
@@ -110,8 +94,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 처음 진입했을 때 기본 상태
-        lblResult.text = "성별을 선택하고 BMI 계산 버튼을 눌러보세요."
+        lblResult.text = "성별을 선택하고 BMI 계산 버튼을 눌러 보세요."
         lblResult.numberOfLines = 2
         lblResult.textColor = .white
         lblResult.backgroundColor = .systemGreen
@@ -123,9 +106,8 @@ class ViewController: UIViewController {
         
         genderSegment.selectedSegmentIndex = 0
         
-        // 코멘트 라벨 설정 (여러 줄)
         commentLabel.text = ""
-        commentLabel.numberOfLines = 0          // 줄 제한 없음
+        commentLabel.numberOfLines = 0
         commentLabel.lineBreakMode = .byWordWrapping
     }
     

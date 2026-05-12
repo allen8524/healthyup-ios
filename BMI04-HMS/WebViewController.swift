@@ -9,36 +9,36 @@ class WebViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // 처음 들어왔을 때 기본으로 운동 정보 페이지 보여주기
+        // 기본 운동 정보 페이지를 표시합니다.
         openWorkoutInfo()
     }
 
-    // MARK: - Actions (버튼 3개)
+    // MARK: - Actions
 
-    /// 네이버 운동 정보
+    /// 운동 정보 검색 페이지를 엽니다.
     @IBAction func goWorkoutInfo(_ sender: UIButton) {
         openWorkoutInfo()
     }
 
-    /// 홈트레이닝 유튜브 검색
+    /// 홈트레이닝 관련 영상을 검색합니다.
     @IBAction func goHomeTraining(_ sender: UIButton) {
         openYoutubeSearch(query: "홈트레이닝 전신 운동 루틴")
     }
 
-    /// 스트레칭 유튜브 검색
+    /// 스트레칭 관련 영상을 검색합니다.
     @IBAction func goStretching(_ sender: UIButton) {
         openYoutubeSearch(query: "전신 스트레칭 루틴")
     }
 
     // MARK: - Private Methods
 
-    /// 실제로 웹뷰에 URL을 로딩하는 함수
+    /// URL을 웹뷰에 로드합니다.
     private func load(_ url: URL) {
         let request = URLRequest(url: url)
         webView.load(request)
     }
 
-    /// 네이버에서 "헬스 운동 기본자세" 검색 결과 페이지 열기
+    /// 네이버에서 운동 정보 검색 결과를 엽니다.
     private func openWorkoutInfo() {
         var components = URLComponents(string: "https://m.search.naver.com/search.naver")
         components?.queryItems = [
@@ -46,13 +46,13 @@ class WebViewController: UIViewController {
         ]
 
         guard let url = components?.url else {
-            print("❌ 네이버 운동 정보 URL 생성 실패")
+            print("네이버 운동 정보 URL 생성 실패")
             return
         }
         load(url)
     }
 
-    /// 유튜브에서 특정 검색어로 검색
+    /// 유튜브에서 특정 검색어로 검색합니다.
     private func openYoutubeSearch(query: String) {
         var components = URLComponents(string: "https://m.youtube.com/results")
         components?.queryItems = [
@@ -60,7 +60,7 @@ class WebViewController: UIViewController {
         ]
 
         guard let url = components?.url else {
-            print("❌ 유튜브 검색 URL 생성 실패")
+            print("유튜브 검색 URL 생성 실패")
             return
         }
         load(url)
